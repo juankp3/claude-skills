@@ -91,6 +91,11 @@ antes. Corta cada línea a 72 columnas como máximo. Sin rutas locales.
 - `RF:` con el primero que exista: los códigos que dio el usuario, `RF_EN_DIFF`,
   `RF_DE_ISSUE`, `RF_DE_RAMA`. Formato `RF02.CA04, RF03`. **No inventes RF.** Si no hay,
   omite la línea.
+  Valen los códigos tal como los escribe la especificación: `RF02.CA04`, `RF02-RN06`,
+  `RT02.CA03`, `RT02-RN10`. Un rango de criterios del mismo RF se abrevia con los dígitos:
+  `RF02.CA02-06`. Si la lista no cabe en 72 columnas, **repite la línea** `RF:` (nunca la
+  continúes con una línea sangrada). Cita los criterios que el commit cubre de verdad, no el
+  RF entero, salvo que cubra todo el RF.
 - `Ticket:` si `TICKET` no está vacío.
 - `Refs: #NNN` con el número de `ISSUE`, si existe. Solo `Refs`, nunca `Closes` ni `Fixes`:
   el cierre del issue se declara en la descripción del PR.

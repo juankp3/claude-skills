@@ -120,7 +120,7 @@ fi
 
 echo "RF_EN_DIFF:"
 git diff --cached -U0 | grep -E '^\+[^+]' \
-	| grep -oE 'RF-?[0-9]{2}(\.(CA|RN)[0-9]{2})?' | tr -d '-' | sort -u | sed 's/^/  /'
+	| grep -oE 'R[FT]-?[0-9]{2}([.-](CA|RN)[0-9]{2})?' | sed -E 's/^(R[FT])-/\1/' | sort -u | sed 's/^/  /'
 
 echo "ESTADISTICAS:"
 git diff --cached --stat | tail -1

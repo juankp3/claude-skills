@@ -68,9 +68,16 @@ if [ -n "$proyecto" ] && ! grep -qx "Proyecto: $proyecto" "$archivo"; then
 	falla "falta la línea 'Proyecto: $proyecto' en el pie"
 fi
 
-if grep -qE '^RF: ' "$archivo" \
-	&& ! grep -qE '^RF: RF[0-9]{2}(\.(CA|RN)[0-9]{2})?(, RF[0-9]{2}(\.(CA|RN)[0-9]{2})?)*$' "$archivo"; then
-	falla "la línea RF: no sigue el formato 'RF: RF02.CA04, RF03'"
+# Un código: RF02 · RF02.CA04 · RF02-RN06 (forma del DFT) · RT02.CA03 · RT02-RN10.
+# Un rango de criterios del mismo RF se abrevia con guion y solo los dígitos: RF02.CA02-06.
+# Si la lista no cabe en 72 columnas, se repite la línea RF: en vez de partirla.
+codigoRf='R[FT][0-9]{2}([.](CA|RN)[0-9]{2}(-[0-9]{2})?|-RN[0-9]{2}(-[0-9]{2})?)?'
+if grep -qE '^RF:' "$archivo" \
+	&& grep -E '^RF:' "$archivo" | grep -vqE "^RF: ${codigoRf}(, ${codigoRf})*$"; then
+	falla "la línea RF: no sigue el formato 'RF: RF02.CA04, RF02-RN06, RT02.CA03, RF02.CA06-09'"
+fi
+if grep -qE '^ +R[FT][0-9]{2}' "$archivo"; then
+	falla "códigos RF en una línea sangrada: repite 'RF:' en cada línea en vez de continuar la anterior"
 fi
 
 if [ "$errores" -eq 0 ]; then
