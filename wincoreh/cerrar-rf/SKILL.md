@@ -30,6 +30,11 @@ Identifica **qué RF** se cierra (rama `WINET-PRY-2026-NNNN-RF-NN`) y abre su fi
 `docs/99-workspace/rf/RF-NN.md`. Si el diff toca RF distintos del de la rama, dilo: es una señal
 de que el MR mezcla alcances.
 
+**Etapa de entrada.** El ciclo de vida es el de `/spec-rf` §1. Lo normal es llegar aquí con el RF
+en *Verificado*. Si está en *Implementado* (CA en 🔵), la revisión se hace igual, pero el veredicto
+no puede ser `Listo para MR` sin la lista de CA sin verificar en *Pendientes* y la confirmación
+expresa del usuario de que se entregan así.
+
 ## 1. Puerta automática
 
 ```bash
@@ -111,6 +116,10 @@ node docs/99-workspace/smoke/smoke-bundle-controlcambios.js /tmp/bundle.js
 Sale con 0 si pasa. Detalle en `docs/99-workspace/smoke/README.md`. Para un módulo nuevo, adapta
 la ruta del `manifest.php` y deja el script correspondiente en `docs/99-workspace/smoke/`.
 
+**Si el script no existe**, no lo des por pasado: repórtalo como pendiente («smoke del bundle sin
+script») y ofrece crearlo. El smoke del bundle no sustituye al funcional de `smoke/RF-NN.md`
+(§7): uno dice que el bundle carga, el otro que los CA se cumplen.
+
 ## 3. Método API nuevo — la comprobación que el código no delata
 
 Si el RF añade un `log<nombre>.<accion>`, **verifica que existe su fila en `co_portlet_events`**
@@ -158,10 +167,14 @@ histórico. Detalle en `/documentar`.
 
 No está cerrado hasta que la documentación lo refleja:
 
-- `docs/99-workspace/rf/RF-NN.md` — `Estado` y `PR` al día; si la implementación se desvió del
-  DFT, la desviación queda escrita en la ficha, no en la cabeza de nadie.
-- `docs/99-workspace/rf/INDEX.md` — la fila del RF, con el mismo estado.
-- El plan en `docs/99-workspace/planes/` — qué quedó fuera y por qué.
+- `docs/99-workspace/rf/RF-NN.md` — columna *Estado* de cada CA/RN/RT con la leyenda de
+  `/spec-rf` §2 (✅ solo con evidencia; 🔵 implementado sin verificar) y la matriz *Trazabilidad e
+  implementación* con *Dónde* y *Evidencia* en cada fila.
+- `docs/99-workspace/rf/DECISIONES.md` — toda desviación del DFT tiene su fila con el supuesto
+  que aplica el código. Comprueba que ningún CA ⛔ o 🟡 remite a una decisión que no está ahí.
+- `docs/99-workspace/rf/INDEX.md` — la columna *Etapa* del RF.
+- El plan en `docs/99-workspace/planes/` — qué quedó fuera y por qué. **No** lleva estados: si
+  tiene una tabla de estados propia, quítala y remite a `RF-NN.md`.
 - **Los `.sql` de `docs/99-workspace/sql/` no están versionados**: recuerda adjuntarlos al ticket
   del pase a producción (`docs/03-development/pases-a-produccion.md`) o al repositorio de BD. Si no,
   no queda rastro de qué se ejecutó en la base.
@@ -183,9 +196,13 @@ completo en `/estandar-codigo` §5.1.
 
 ## 7. Verificación funcional
 
-El lint verde no dice que la pantalla funcione. Si no se probó en el navegador
-(`http://localhost:${WEB_PORT}/`), dilo como **pendiente**, con la ruta exacta y el caso a probar.
-Nunca lo des por hecho.
+El lint verde no dice que la pantalla funcione. La verificación es `docs/99-workspace/smoke/RF-NN.md`
+(`/spec-rf verificar`): una fila por paso del plan, con su CA y una columna por ejecución.
+
+- Cuenta los CA del alcance por estado. Todo CA que no esté en ✅, ➖ o en ⛔/🟡 justificado es un
+  **pendiente**, con el número de paso de smoke que lo verificaría.
+- Si el smoke no se ha ejecutado nunca, dilo así; nunca lo des por hecho porque el lint pase.
+- Un ✅ sin evidencia en la matriz es un hallazgo: bájalo a 🔵 y dilo en el reporte.
 
 ## 8. Reporte final
 
@@ -195,7 +212,9 @@ Cierra con esta forma, en este orden:
 2. **Puerta automática** — resultado de PHPCS / PHPStan / ESLint / smoke, distinguiendo errores
    nuevos del ruido preexistente.
 3. **Tabla IC** — con el resumen `N/30`, críticos y recomendados.
-4. **Pendientes** — verificación en navegador, SQL por adjuntar, decisiones del analista abiertas.
+4. **Cobertura** — CA del alcance: ✅ N · 🔵 N · 🟡 N · ⛔ N · ➖ N, y la *Etapa* resultante.
+5. **Pendientes** — pasos de smoke sin ejecutar, SQL por adjuntar, filas 🟠/📤 de DECISIONES que
+   afectan al RF.
 
 Con hallazgos: enúncialos y **espera decisión** antes de arreglar nada que no sea estilo. Si el
 usuario pide arreglar, arregla y **vuelve a correr §1** — no reportes verde sobre una corrección

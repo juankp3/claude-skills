@@ -9,6 +9,7 @@ generales/     sirven en cualquier proyecto PHP de WIN → se enlazan en ~/.clau
 wincoreh/      solo WincoreH → se enlazan en <worktree>/.claude/skills/
   cerrar-rf/  documentar/  endpoint-bruno/  estandar-codigo/  paquete-bd/
   estandar-bd-wincoreh/   cómo se aplica estandar-bd en WincoreH
+  spec-rf/    flujo spec-driven de un RF: etapas y puertas, DECISIONES.md, smoke, plantillas
 instalar.sh
 ```
 

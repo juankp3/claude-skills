@@ -75,6 +75,33 @@ docs {
 }
 ```
 
+## Peticiones que prueban un criterio: `tests` y casos de rechazo
+
+El `assert` dice que la petición respondió; un bloque `tests` dice que **cumple un CA**. Es la
+única evidencia ejecutable que tiene el repo, así que todo método que implemente un CA con reglas
+—validaciones, rechazos, códigos— lleva:
+
+1. **La petición feliz** (`<accion>.bru`) con `tests` sobre `status` y la forma de `datos`.
+2. **Una petición por código de rechazo** que se pueda provocar sin preparar datos a mano:
+   `<accion>-rechazo-<motivo>.bru` (`guardarRecorridoCable-rechazo-huella.bru`). Si un rechazo
+   necesita datos preparados (un elemento dado de baja), se documenta en `docs` del feliz como
+   «caso manual» en vez de crear una petición que no se puede repetir.
+3. El **nombre de cada test empieza por el ID** del criterio que prueba, para que el resultado
+   sirva de evidencia en la matriz (`/spec-rf` §6):
+
+```
+tests {
+  test("RT02.CA09 · huella vieja → RECORRIDO_CAMBIO", function() {
+    expect(res.getStatus()).to.equal(400);
+    expect(res.getBody().status).to.equal(-1);
+    expect(res.getBody().codigo).to.equal("RECORRIDO_CAMBIO");
+  });
+}
+```
+
+Una petición de rechazo **nunca escribe**: elige el motivo de modo que la validación corte antes
+de la primera escritura. Si no es posible, no se crea.
+
 Cuatro reglas que no se negocian, porque son las que hacen fallar la petición:
 
 1. **`{{baseUrl}}/php/` con barra final.** Sin ella el servidor redirige y la redirección degrada
@@ -142,10 +169,12 @@ visible en la UI) antes que un `script:post-response`.
 1. Escribe el método en `logic/log<nombre>.php` con su validación de inputs.
 2. Deja el SQL de `co_portlet_events` en `docs/99-workspace/sql/`, idempotente.
 3. **Añade el `.bru`** siguiendo la plantilla.
-4. Ejecútalo en Bruno y pega el resultado real en el bloque `docs` si aporta (forma de la
+4. Añade los `tests` y las peticiones de rechazo (sección anterior).
+5. Ejecútalo en Bruno y pega el resultado real en el bloque `docs` si aporta (forma de la
    respuesta, tiempos). Si no puedes ejecutarlo —BD caída, sin sesión—, **dilo**; no dejes un
-   `.bru` sin verificar haciéndolo pasar por probado.
-5. Si cambias la firma de un método existente, actualiza su `.bru` en el mismo commit. Un ejemplo
+   `.bru` sin verificar haciéndolo pasar por probado. Un test que nunca se ejecutó no es
+   evidencia: el CA sigue en 🔵.
+6. Si cambias la firma de un método existente, actualiza su `.bru` en el mismo commit. Un ejemplo
    que ya no funciona es peor que no tener ejemplo.
 
 ## Puesta a punto (primera vez o token caducado)

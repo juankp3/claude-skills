@@ -23,10 +23,17 @@ Todo documento nuevo nace aquí. **No crees documentos directamente en `docs/00-
 
 | Carpeta | Contenido |
 |---|---|
-| `rf/` | Requerimientos funcionales del DFT, su `INDEX.md`, anexos normativos |
-| `planes/` | Planes de implementación, previos a escribir código |
+| `rf/` | Requerimientos funcionales del DFT, su `INDEX.md`, anexos normativos y **`DECISIONES.md`**, el registro único de preguntas y decisiones |
+| `planes/` | Planes de implementación, previos a escribir código. **Sin estados** |
+| `smoke/` | `RF-NN.md`: pasos de verificación por CA y resultado de cada ejecución. Es la evidencia de los ✅ |
 | `sql/` | Scripts de apoyo (permisos, catálogos) asociados a un RF |
-| `notas/` | Análisis, hallazgos, preguntas abiertas al analista, notas de sesión |
+| `notas/` | Análisis (fotos fechadas), hallazgos, paquetes de preguntas, notas de sesión |
+
+**Qué documentos tiene un RF y en qué etapa** lo fija `/spec-rf` (§1 y §10). La regla que importa
+aquí: cada dato vive en un solo documento. El estado de un CA, en `RF-NN.md`; una pregunta y su
+supuesto vigente, en `DECISIONES.md`; el resultado de una prueba, en `smoke/RF-NN.md`. Un análisis
+o un plan remite a ellos, no los copia. Una pregunta nueva no se crea dentro de un análisis o un
+plan sin añadir su fila a `DECISIONES.md`.
 
 Si el documento no encaja en ninguna, va a `notas/`. Crea carpeta nueva solo cuando el tipo se
 repita, y entonces actualiza la tabla de `docs/99-workspace/README.md`.
@@ -103,6 +110,10 @@ PRY-2026-0001.
 
 **Qué no se promueve nunca:** el DFT crudo, notas de sesión, preguntas al analista sin resolver,
 planes cuyas desviaciones ya están absorbidas por el código.
+
+**Qué sí se promueve de un RF cerrado:** la matriz de trazabilidad resumida (CA → archivos, con
+estado final) y las decisiones de `DECISIONES.md` ya respondidas o asumidas que expliquen por qué
+el código se aparta del DFT. Van en `docs/03-development/proyectos/<pry-…>/`.
 
 ## 4. Autoría del código
 
