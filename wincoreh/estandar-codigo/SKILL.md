@@ -15,6 +15,10 @@ description: >
 
 # Estándar de código de WincoreH
 
+> **Fuente oficial:** el formato *[IC] Lista de estándar Código Fuente* (v1.0, 16/09/2026) que llena
+> el revisor de IC. Este skill lo concreta para el repo; si se contradicen, gana el documento. Lo que
+> marcó la primera revisión del Bloque 2: `docs/03-development/inspeccion.md` §10.
+
 El objetivo no es llegar a cero errores de lint —el repo arrastra miles de preexistentes— sino
 **dejar impecable el archivo que tocas, sin agregar ni un error nuevo**. Todo lo de abajo sale de
 la configuración real, verificada con archivos de violaciones deliberadas el 13/08/2026 y
@@ -146,7 +150,7 @@ red.
 | Elemento | Convención | Sniff |
 |---|---|---|
 | Clase | `PascalCase`, sin namespace, con prefijo de módulo (`ControlcambiosTerminal`) | `Squiz.Classes.ValidClassName` |
-| Método | `camelCase` estricto — nada de `get_user()` ni `GetUser()` | `Generic.NamingConventions.CamelCapsFunctionName` (strict) |
+| Método | `camelCase` estricto — nada de `get_user()`, `GetUser()` ni dos mayúsculas seguidas (`intONull`, `getPostesYCajas`: la palabra de una letra las provoca) | `Generic.NamingConventions.CamelCapsFunctionName` (strict) |
 | Variable | `camelCase` — nada de `$data_params` | `Squiz.NamingConventions.ValidVariableName` |
 | Constante | `MAYUSCULAS_CON_GUION_BAJO`, y en este repo **sin** visibilidad explícita (`const X = …`), como el resto de clases | `Generic.NamingConventions.UpperCaseConstantName` |
 
@@ -166,6 +170,9 @@ red.
 - `declare(strict_types=1)` justo después de `<?php` en archivos nuevos. Ojo: con tipos estrictos,
   un método `f(string $x)` revienta si el llamador pasa un `int` — comprueba el llamador.
 - Visibilidad explícita en métodos y propiedades.
+- **Máximo 3 parámetros** por función (punto 12 oficial). Ninguna herramienta lo mira en PHP.
+- **Un método de API que no lee `$params` no lo declara** (punto 24). El dispatcher lo pasa igual
+  por `call_user_func` y PHP acepta argumentos de más; el revisor marcó un `$params` sin usar.
 - **`empty()` está prohibido** por strict-rules: `count($x) === 0`, `$x === ''` o `$x === null`.
 - **Código comentado = error** (`Squiz.PHP.CommentedOutCode`). Bórralo, no lo dejes "por si acaso".
 
@@ -179,7 +186,8 @@ contador modificado dentro del `for` **pasan sin una queja**. En PHP esos puntos
   pasarse).
 - **`const` por defecto, `let` si cambia, nunca `var`.**
 - **camelCase**; constantes de módulo en `MAYUSCULAS_CON_GUION_BAJO`.
-- **Máximo 80 líneas por función** y **4 parámetros**. Con más, pasar un objeto y desestructurar.
+- **Máximo 80 líneas por función** y **3 parámetros** (oficial). Con más, pasar un objeto y
+  desestructurar. ESLint lo aplica con `max-params` (3).
 - `default-case` en todo `switch`; sin bloques vacíos, tampoco un `catch` vacío.
 - `eqeqeq` smart; `no-shadow` y `no-redeclare` activos.
 - `console.log` es warning; solo `console.warn` y `console.error`. Quita las trazas de depuración.
@@ -206,7 +214,7 @@ raíz frente a 17 del mismo archivo en `componentes/`). Todo lo demás cuelga de
 | Nombre fuera de convención | Renombrar y **actualizar los llamadores** (`grep -rn`). Si es público y sale del módulo, pregunta antes |
 | Línea > 120 | Partirla por un operador o un argumento, respetando la alineación |
 | Función > 100 líneas (PHP) / > 80 (JS) | Extraer un método privado con nombre propio. Pregunta antes: cambia la forma del archivo |
-| Más de 4 parámetros | Agrupar en un array asociativo (PHP) u objeto desestructurado (JS) |
+| Más de 3 parámetros | Agrupar en un array asociativo (PHP) u objeto desestructurado (JS) |
 | `empty()` | `count($x) === 0`, `$x === ''` o `$x === null` según el tipo real |
 | Sintaxis 8.x | Reescribir a 7.4 (`?->` → `isset()` + acceso; `match` → `switch`) |
 | Código comentado | Borrarlo |
@@ -231,6 +239,9 @@ raíz frente a 17 del mismo archivo en `componentes/`). Todo lo demás cuelga de
 ```php
 // juan_kuga - WINET-PRY-2026-0004 - DD/MM/AAAA - qué cambió y por qué.
 ```
+
+**Todo archivo modificado lleva su línea**, incluidos los excluidos del lint (`php/database.php`),
+`php/comun/` y el logic heredado donde solo cambió una línea: el revisor los lista uno a uno.
 
 Nunca una cabecera en bloque por cada cambio. **Las cabeceras ya escritas no se tocan** — son
 registro histórico. La autoría del código nuevo de PRY-2026-0004 la fija [documentar].
@@ -273,11 +284,12 @@ Revísalo tú **mientras corriges**, porque no hay sniff que lo detecte:
 - **1 y 2 — nada de hardcode de BD ni de IPs.** Todo `DEFINE` vive en `php/database.php`; en el
   front, la configuración se antepone al bundle como `window.<MODULO>_CONFIG` desde PHP.
 - **3 — nombres que digan qué contienen.** `$filas`, no `$data2`.
-- **9 — nada de HTML en la lógica de negocio.** Las vistas viven en `interface/`.
+- **9 — nada de HTML en la lógica de negocio, ni HTML en una sola línea.** Las vistas viven en `interface/`.
 - **10 — una función, una responsabilidad.**
 - **18 — `try/catch` con sentido**; el `catch` que ignora algo explica por qué.
 - **20 — no modificar el contador dentro del `for`.**
-- **22, 23, 24 en PHP** — PHPStan no los ve.
+- **12 en PHP — máximo 3 parámetros.**
+- **22, 23, 24 en PHP** — PHPStan no los ve. El 24 incluye el `$params` de los métodos de API.
 - **25 — un `switch` con menos de 2 `case` sobra**; conviértelo en `if`.
 - **26 — validar los inputs de todo método API** antes de tocar la BD.
 - **27 — no reutilizar un nombre de variable para dos propósitos.**

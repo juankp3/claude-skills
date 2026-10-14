@@ -120,14 +120,23 @@ el código se aparta del DFT. Van en `docs/03-development/proyectos/<pry-…>/`.
 Las cabeceras de auditoría (punto 29 del checklist IC) de **código nuevo de PRY-2026-0004** llevan
 **`Juan Kuga` como único autor**. Diego Ordoñez salió del proyecto el 12/08/2026.
 
+Formato del documento oficial de IC (punto 29): `nombre_apellido - código de proyecto - fecha -
+detalle`. Al crear el archivo, en bloque:
+
 ```php
 /*
- * Juan Kuga - PRY-2026-0004-WINET - Bloque 2
- * Descripción: <qué hace y a qué RF/CA responde>
+ * Nombre usuario: juan_kuga
+ * Cod Proyecto: WINET-PRY-2026-0004 — Bloque N
+ * Fecha: DD/MM/AAAA
+ * Detalle: <qué hace y a qué RF/CA responde>
  */
 ```
 
-O en línea: `// Juan Kuga - PRY-2026-0004-WINET - Bloque 2 - DD/MM/AAAA - <detalle>`
+Al modificar, en línea: `// juan_kuga - WINET-PRY-2026-0004 - DD/MM/AAAA - <detalle>`
+
+**Lo lleva todo archivo que entra en el MR**, también `php/database.php`, `php/comun/` y el logic
+heredado donde solo cambió una línea. Las cabeceras con el formato anterior
+(`Juan Kuga - PRY-2026-0004-WINET - Bloque 2`) se quedan como están: son registro histórico.
 
 - **No añadas `Diego Ordoñez`** a código nuevo de este proyecto.
 - **No lo quites de las cabeceras existentes.** Son registro histórico de quién estaba en el

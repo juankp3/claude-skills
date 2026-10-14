@@ -159,7 +159,8 @@ archivo entero. El lint ya cubre estilo e indentación; **concéntrate en lo que
 - **1, 2** — nada de credenciales, IPs ni nombres de BD fuera de `php/database.php`. En el front,
   la config va inyectada como `window.<MODULO>_CONFIG` desde PHP, nunca hardcodeada en el `.js`.
 - **3, 27** — nombres que digan lo que contienen; ninguna variable reutilizada para dos cosas.
-- **10, 11, 12** — una responsabilidad por función; PHP ≤100 líneas, JS 60-80; máx. 3-4 parámetros.
+- **10, 11, 12** — una responsabilidad por función; PHP ≤100 líneas, JS 60-80; máx. **3** parámetros
+  (documento oficial; ESLint `max-params` 3, en PHP no hay sniff).
 - **13, 30** — código comentado = error (`Squiz.PHP.CommentedOutCode`); revísalo también en los `.js`.
 - **18, 28** — try/catch en toda operación asíncrona y en el acceso a BD; ningún catch vacío ni mudo.
 - **22, 25** — todo `switch` con `default` y mínimo 2 `case`.
@@ -174,14 +175,23 @@ Reporta en la tabla IC estándar con ✅ / ❌ / ⚠️ / N/A, resumen `N/30`, y
 Todo fragmento nuevo o modificado la lleva. En **PRY-2026-0004** el autor es **`Juan Kuga` solo**
 (Diego Ordoñez salió del proyecto el 12/08/2026):
 
+Formato del documento oficial de IC (punto 29): `nombre_apellido - código de proyecto - fecha -
+detalle`. Al crear el archivo, en bloque:
+
 ```php
 /*
- * Juan Kuga - PRY-2026-0004-WINET - Bloque 2
- * Descripción: <qué hace y a qué RF/CA responde>
+ * Nombre usuario: juan_kuga
+ * Cod Proyecto: WINET-PRY-2026-0004 — Bloque N
+ * Fecha: DD/MM/AAAA
+ * Detalle: <qué hace y a qué RF/CA responde>
  */
 ```
 
-O en línea: `// Juan Kuga - PRY-2026-0004-WINET - Bloque 2 - DD/MM/AAAA - <detalle>`
+Al modificar, en línea: `// juan_kuga - WINET-PRY-2026-0004 - DD/MM/AAAA - <detalle>`
+
+**Lo lleva todo archivo que entra en el MR**, también `php/database.php`, `php/comun/` y el logic
+heredado donde solo cambió una línea. Las cabeceras con el formato anterior
+(`Juan Kuga - PRY-2026-0004-WINET - Bloque 2`) se quedan como están: son registro histórico.
 
 **No añadas a Diego a código nuevo y no lo borres de las cabeceras existentes**: son registro
 histórico. Detalle en `/documentar`.
