@@ -26,9 +26,32 @@ git diff --name-only "$BASE"          # el alcance real de la revisión
 git diff "$BASE"                      # lo que hay que leer, no solo listar
 ```
 
-Identifica **qué RF** se cierra (rama `WINET-PRY-2026-NNNN-RF-NN`) y abre su ficha en
+Identifica **qué RF** se cierra (rama `feature/<issue>-rf-NN-<descripcion>`) y abre su ficha en
 `docs/99-workspace/rf/RF-NN.md`. Si el diff toca RF distintos del de la rama, dilo: es una señal
 de que el MR mezcla alcances.
+
+**Nombre de la rama.** El pipeline de GitHub (Modelo Operativo GitHub WIN, sección 7) valida el
+nombre **antes que nada**: si no cumple, comenta «Nomenclatura de rama inválida» y corta la
+cadena; lint, Semgrep y CodeQL ni se ejecutan. Comprueba la rama antes de abrir el PR:
+
+```bash
+git branch --show-current | grep -qE '^(feature|fix|hotfix)/[0-9]+-[a-z0-9]+(-[a-z0-9]+)*$' \
+  && echo OK || echo "Rama inválida"
+```
+
+- Prefijo `feature/` (RF nuevo), `fix/` o `hotfix/`; `<issue>` es el número del issue de GitHub.
+- `<descripcion>` en minúsculas, **sin acentos ni ñ**, sin espacios, palabras separadas por guion.
+  ✅ `feature/849-rf-01-estructura-operacion-edicion-cables` ·
+  ❌ `849-rf-01-estructura-de-la-operación-edición-de-cables` (sin prefijo y con acentos).
+- Si no cumple, renombra sin perder trabajo y reabre el PR desde la rama nueva:
+
+```bash
+git branch -m <rama-actual> feature/<issue>-<descripcion>
+git push origin -u feature/<issue>-<descripcion>
+git push origin --delete <rama-actual>      # solo con confirmación del usuario
+```
+
+La rama destino del PR (`integration/<issue>-…`) no la valida el pipeline; no se renombra.
 
 **Etapa de entrada.** El ciclo de vida es el de `/spec-rf` §1. Lo normal es llegar aquí con el RF
 en *Verificado*. Si está en *Implementado* (CA en 🔵), la revisión se hace igual, pero el veredicto

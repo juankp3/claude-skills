@@ -111,8 +111,10 @@ estado y su supuesto vigente están **solo** aquí.
 
 ## 5. `fase RF-NN Fn` — implementar una fase y cerrar su puerta
 
-Antes de escribir: confirma que el RF está *Listo* o *En curso* y carga `/estandar-codigo`. Si la
-fase añade o cambia un método API, `/endpoint-bruno`; si toca BD, `/estandar-bd` y `/paquete-bd`.
+Antes de escribir: confirma que el RF está *Listo* o *En curso*, que la rama se llama
+`feature/<issue>-rf-NN-<descripcion>` (minúsculas, sin acentos, guiones; `/cerrar-rf` §0 — el
+pipeline rechaza el PR si no) y carga `/estandar-codigo`. Si la fase añade o cambia un método
+API, `/endpoint-bruno`; si toca BD, `/estandar-bd` y `/paquete-bd`.
 
 Al terminar la fase, **puerta de fase**, en este orden:
 

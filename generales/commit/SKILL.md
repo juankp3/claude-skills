@@ -27,7 +27,7 @@ git diff --cached
 ```
 
 Pasa el número de issue si el usuario lo dio (`#899` → `899`); normalmente es una Task. Sin
-él, el script usa el número con que empieza la rama (`849-rf-01-…` → `#849`). El script
+él, el script usa el número con que empieza la rama (`feature/849-rf-01-…` → `#849`). El script
 recorre en GitHub la jerarquía Task → User Story → Feature → Épica e imprime `CADENA`.
 
 - Si `PREPARADOS: ninguno` → **detente** y di: "No hay cambios preparados. Usa `git add` con
