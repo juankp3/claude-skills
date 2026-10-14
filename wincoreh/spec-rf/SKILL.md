@@ -152,10 +152,50 @@ o ⏭ (no ejecutado, con motivo).
 
 ## 8. `preguntas` — paquete para la analista y el arquitecto
 
-Genera `notas/paquete-preguntas-AAAAMMDD.md` con las filas 🟠 de DECISIONES, agrupadas por
-destinatario y por RF, bloqueantes primero. Cada pregunta, autocontenida: contexto en una frase,
-la pregunta, y «si no hay respuesta, se aplica: <supuesto>». Sin rutas del repo ni jerga de
-código. Cuando el usuario confirme que lo envió, marca esas filas 📤 con fecha y destinatario.
+Genera `notas/paquete-preguntas-AAAAMMDD.md`: un documento **corto**, que la analista pueda
+responder de una sentada. No es un volcado de DECISIONES.
+
+**Qué entra: lo que importa, no todo lo 🟠.** Una pregunta va al paquete solo si cumple al menos
+una de estas condiciones:
+
+- bloquea algo (una fase, o dar un CA por ✅);
+- el DFT se contradice (CA frente a RT, DFT frente a mockup) en algo que el usuario ve o que se
+  guarda;
+- una respuesta distinta del supuesto obligaría a rehacer código o datos.
+
+Lo demás —supuestos de bajo impacto, o que siguen al DFT o al mockup— no se pregunta: pasa a
+`🔒 asumida DD/MM` en DECISIONES con la nota «fuera del paquete; se valida en la demo». Se
+reabre si la analista objeta. Objetivo orientativo: **unas 10 preguntas en total**; si salen más
+de 12, vuelve a filtrar.
+
+**Agrupar.** Si una sola respuesta resuelve varios CA, RN o RT (o varias filas de DECISIONES),
+van en **una** pregunta que los cita a todos. Una pregunta, una duda: nada de listas de
+subpreguntas.
+
+**Formato de cada pregunta** (sin intro larga, sin rutas del repo, sin jerga de código; los
+nombres de tabla o columna solo si el propio DFT los usa):
+
+```markdown
+### N. <título corto> · **bloquea <qué>**     ← la marca solo si bloquea
+
+> **RF02.CA14** — «<texto del DFT tal cual; si es largo, solo el fragmento que importa, con […]>»
+>
+> **RT02.CA14** — «<otro texto citado, si la misma pregunta lo resuelve>»
+
+**Pregunta:** <una o dos frases: qué no cuadra y qué hay que decidir>
+
+*Mientras tanto:* <lo que el código aplica hoy, en una frase>
+```
+
+Orden: primero **Para la analista** y después **Para el arquitecto**; dentro de cada parte, las
+que bloquean primero y luego por RF. Numeración continua en todo el documento. Cabecera de dos
+líneas: proyecto, revisión del DFT, fecha y autor, y que «OK» basta si están de acuerdo con el
+supuesto.
+
+**En DECISIONES**, cada fila que cubre el paquete lleva en *Respuesta / si cambia* «Paquete
+DD/MM, pregunta N». El paquete nuevo sustituye al anterior sin enviar (se borra; queda en el git
+del workspace). Cuando el usuario confirme que lo envió, marca esas filas 📤 con fecha y
+destinatario.
 
 ## 9. `estado` — foto del bloque
 
