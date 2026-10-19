@@ -62,6 +62,7 @@ expresa del usuario de que se entregan así.
 
 ```bash
 make lint                             # phpcs + phpstan + eslint (los tres, en ese orden)
+make test                             # pruebas unitarias: PHPUnit + node:test (tests/README.md)
 make lint-file FILE=php/ruta/x.php    # iterar sobre un archivo concreto
 make lint-fix                         # SOLO estilo (phpcbf); nunca lo uses para "arreglar" lógica
 ```
@@ -77,6 +78,20 @@ que NO debe perseguirse ni reportarse como fallo del RF:
 
 Contrasta siempre contra la base: si dudas de si un error es nuevo, corre el mismo comando sobre
 `$BASE` y compara. Un error preexistente no bloquea; uno introducido por el RF, sí.
+
+**`make test` no tiene ruido tolerado: tiene que salir en verde entero.** Una prueba en rojo de otro
+RF es una regresión de este. Además, comprueba que las reglas críticas del RF tienen su prueba:
+
+```bash
+# Archivos de reglas tocados por el RF y la prueba que les corresponde (tests/ espeja el código).
+git diff --name-only --diff-filter=AM "$BASE"...HEAD -- \
+    'php/apps/*/helpers/*.php' 'php/apps/*/validaciones/*.php' 'php/apps/*/interface/*/core/*.js'
+ls tests/php/apps/*/helpers tests/js/apps/*/*/core
+```
+
+Un archivo de la lista sin prueba no bloquea por sí solo —el filtro de `/pruebas-unitarias` §1
+deja fuera lo que no decide nada—, pero el reporte dice cuál es y por qué no la lleva. Si tiene una
+regla que pasa el filtro y no está probada, es un hallazgo.
 
 ### 1.1 Contratos que el lint no ve
 
@@ -242,8 +257,8 @@ El lint verde no dice que la pantalla funcione. La verificación es `docs/99-wor
 Cierra con esta forma, en este orden:
 
 1. **Veredicto** — `Listo para MR` / `Bloqueado: <motivo en una línea>`.
-2. **Puerta automática** — resultado de PHPCS / PHPStan / ESLint / smoke, distinguiendo errores
-   nuevos del ruido preexistente.
+2. **Puerta automática** — resultado de PHPCS / PHPStan / ESLint / `make test` / smoke,
+   distinguiendo errores nuevos del ruido preexistente, y los archivos de reglas sin prueba.
 3. **Tabla IC** — con el resumen `N/30`, críticos y recomendados.
 4. **Cobertura** — CA del alcance: ✅ N · 🔵 N · 🟡 N · ⛔ N · ➖ N, y la *Etapa* resultante.
 5. **Pendientes** — pasos de smoke sin ejecutar, SQL por adjuntar, filas 🟠/📤 de DECISIONES que

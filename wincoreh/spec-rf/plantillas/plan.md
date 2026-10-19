@@ -30,6 +30,7 @@ Cubre: RFNN.CA01–CA03, RFNN-RN01.
 
 | Tarea | Detalle | h |
 |---|---|---|
+| T1.P | Pruebas unitarias: <reglas que pasan el filtro de /pruebas-unitarias §1>, o «ninguna: <motivo>» | |
 
 ## 6. Archivos
 
@@ -37,9 +38,9 @@ Cubre: RFNN.CA01–CA03, RFNN-RN01.
 
 **Todos** los CA, RN y RT del RF. Sin columna de estado.
 
-| ID | Cómo se cumplirá | Fase · tarea | Paso de verificación |
-|---|---|---|---|
-| RFNN.CA01 | | F1 · T1.1 | 1, 2 |
+| ID | Cómo se cumplirá | Fase · tarea | Prueba unitaria | Paso de verificación |
+|---|---|---|---|---|
+| RFNN.CA01 | | F1 · T1.1 | `tests/…` o — | 1, 2 |
 
 ## 8. Verificación
 

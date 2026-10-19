@@ -55,7 +55,7 @@ celda lo dice — `Implementado (F1–F3) · F4 ⛔ P2-05`.
 | Estado | Significa | Requisito |
 |---|---|---|
 | ✅ | Verificado | Evidencia en la matriz: paso de `smoke/RF-NN.md` con fecha, o petición Bruno con `tests` ejecutada |
-| 🔵 | Implementado, sin verificar | Commit hecho (o diff listo) y lint en verde. Pruebas fuera de la aplicación (Node, transacción revertida, arnés) se anotan como evidencia previa, pero no dan ✅ |
+| 🔵 | Implementado, sin verificar | Commit hecho (o diff listo), lint y `make test` en verde. Las pruebas fuera de la aplicación (unitarias de `tests/`, transacción revertida, arnés) se anotan como evidencia previa, pero no dan ✅ |
 | 🟡 | Parcial | Se dice qué parte falta y de quién depende (otro RF, una decisión) |
 | 🕐 | Pendiente | — |
 | ⛔ | Bloqueado | Remite a la fila de DECISIONES que lo bloquea |
@@ -78,7 +78,9 @@ Lee `RF-NN.md`, su análisis, su plan, `DECISIONES.md` y `INDEX.md`, y responde 
 4. **Dependencias** — los RF de los que depende están al menos en *Implementado*. Si están en 🔵
    sin verificar, avisa: se construye sobre algo sin probar (no bloquea, pero va al riesgo).
 5. **Plan** — tiene fases, cada una entregable sola; tabla de trazabilidad con **todos** los CA,
-   RN y RT del RF (o su motivo de exclusión); verificación con al menos un paso por CA.
+   RN y RT del RF (o su motivo de exclusión); verificación con al menos un paso por CA; y en cada
+   fase, la tarea `Tn.P` con las reglas que llevarán prueba unitaria (`/pruebas-unitarias` §1), o
+   «ninguna» con su motivo.
 6. **Modelo de datos y endpoints** — objetos de BD nuevos con `/estandar-bd`; métodos nuevos con su
    fila de `co_portlet_events` prevista.
 
@@ -113,19 +115,23 @@ estado y su supuesto vigente están **solo** aquí.
 
 Antes de escribir: confirma que el RF está *Listo* o *En curso*, que la rama se llama
 `feature/<issue>-rf-NN-<descripcion>` (minúsculas, sin acentos, guiones; `/cerrar-rf` §0 — el
-pipeline rechaza el PR si no) y carga `/estandar-codigo`. Si la fase añade o cambia un método
-API, `/endpoint-bruno`; si toca BD, `/estandar-bd` y `/paquete-bd`.
+pipeline rechaza el PR si no) y carga `/estandar-codigo` y `/pruebas-unitarias`. Si la fase
+añade o cambia un método API, `/endpoint-bruno`; si toca BD, `/estandar-bd` y `/paquete-bd`.
 
 Al terminar la fase, **puerta de fase**, en este orden:
 
 1. `make lint` (o `make lint-file`) y ESLint sobre lo tocado: sin errores nuevos.
-2. Los pasos de `smoke/RF-NN.md` de esa fase. Si no se pueden ejecutar en la aplicación, se
-   anota la evidencia previa (Node, transacción revertida) y el CA queda en 🔵.
-3. Estados en `RF-NN.md`: los CA de la fase a 🔵 o ✅; matriz con *Dónde* y *Evidencia*.
-4. Supuestos nuevos aparecidos al implementar → filas en DECISIONES.
-5. **Commit de la fase** con `/commit`, citando en `RF:` los CA de la fase (no el RF entero). Una
-   fase con cambios ajenos (tooling, docs generales) va en commits separados.
-6. *Etapa* en INDEX: `En curso · F(n+1)` o `Implementado`.
+2. **Pruebas unitarias** de las reglas críticas de la fase (`/pruebas-unitarias` §5): escritas,
+   comprobado que fallan al romper la regla, y `make test` en verde — todo, no solo lo nuevo: una
+   prueba de un RF anterior en rojo es una regresión de esta fase.
+3. Los pasos de `smoke/RF-NN.md` de esa fase. Si no se pueden ejecutar en la aplicación, se
+   anota la evidencia previa (pruebas unitarias, transacción revertida) y el CA queda en 🔵.
+4. Estados en `RF-NN.md`: los CA de la fase a 🔵 o ✅; matriz con *Dónde* y *Evidencia*.
+5. Supuestos nuevos aparecidos al implementar → filas en DECISIONES.
+6. **Commit de la fase** con `/commit`, citando en `RF:` los CA de la fase (no el RF entero). Las
+   pruebas unitarias de la fase van en ese mismo commit; una fase con cambios ajenos (tooling,
+   docs generales) va en commits separados.
+7. *Etapa* en INDEX: `En curso · F(n+1)` o `Implementado`.
 
 No se empieza la fase siguiente con la anterior sin commitear.
 
@@ -225,5 +231,7 @@ Un análisis o un plan que necesite decir "esto ya está hecho" lo dice con un a
 - `/documentar` — enruta documentos y la promoción a `docs/`. Este skill dice **qué** documentos
   tiene un RF y en qué etapa; aquel, dónde vive cada uno y cuándo se promueve.
 - `/estandar-codigo`, `/endpoint-bruno`, `/estandar-bd`, `/paquete-bd` — durante la fase.
-- `/commit` — al cerrar cada fase (§5.5).
+- `/pruebas-unitarias` — qué reglas de la fase llevan prueba y cómo; también `retro RF-NN` para
+  un RF que se implementó sin ellas.
+- `/commit` — al cerrar cada fase (§5.6).
 - `/cerrar-rf` — puerta final: exige el RF en *Verificado* o los pendientes explícitos.
