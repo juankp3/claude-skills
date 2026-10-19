@@ -10,6 +10,12 @@ wincoreh/      solo WincoreH → se enlazan en <worktree>/.claude/skills/
   cerrar-rf/  documentar/  endpoint-bruno/  estandar-codigo/  paquete-bd/
   estandar-bd-wincoreh/   cómo se aplica estandar-bd en WincoreH
   spec-rf/    flujo spec-driven de un RF: etapas y puertas, DECISIONES.md, smoke, plantillas
+  pruebas-unitarias/  qué regla de negocio lleva prueba, cómo se escribe y se muta; make test
+agentes/
+  wincoreh/    subagentes de WincoreH → se enlazan en <worktree>/.claude/agents/
+    qa-funcional.md     QA independiente en el navegador, contra el DFT, sin ver el código
+    revisor-ic.md       checklist IC y defectos sobre el diff, antes del PR
+    revisor-pruebas.md  cobertura, correspondencia con el ID y mutación de las pruebas
 instalar.sh
 ```
 

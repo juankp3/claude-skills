@@ -85,6 +85,16 @@ for skill in "$repo/$coleccion"/*/; do
 	enlazar "${skill%/}" "$destino"
 done
 
+# Agentes (subagentes de Claude Code): agentes/<coleccion>/*.md → <proyecto>/.claude/agents/.
+if [ -d "$repo/agentes/$coleccion" ]; then
+	destinoAgentes="$proyecto/.claude/agents"
+	mkdir -p "$destinoAgentes"
+	echo "agentes/$coleccion → $destinoAgentes"
+	for agente in "$repo/agentes/$coleccion"/*.md; do
+		enlazar "$agente" "$destinoAgentes"
+	done
+fi
+
 # Cursor y Codex leen .agents/skills/: si el proyecto ya lo usa, se enlazan ahí los generales
 # para que todos los agentes lean la misma copia.
 if [ -d "$proyecto/.agents/skills" ]; then
