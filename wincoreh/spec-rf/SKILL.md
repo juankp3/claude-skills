@@ -87,6 +87,9 @@ Lee `RF-NN.md`, su análisis, su plan, `DECISIONES.md` y `INDEX.md`, y responde 
 Veredicto: `Listo` o `No listo: <lo mínimo que falta>`. Si está listo, actualiza la *Etapa* en
 INDEX. Si no, no empieces a escribir código: propón resolver lo que falta.
 
+Si el issue del RF sigue en Backlog en el tablero de GitHub, pásalo a **Análisis** con
+`/tablero-github` (también al empezar `plan`).
+
 ## 4. `rf/DECISIONES.md` — registro único
 
 Plantilla en `plantillas/decisiones.md`. Una fila por pregunta o decisión, con estas columnas:
@@ -117,6 +120,7 @@ Antes de escribir: confirma que el RF está *Listo* o *En curso*, que la rama se
 `feature/<issue>-rf-NN-<descripcion>` (minúsculas, sin acentos, guiones; `/cerrar-rf` §0 — el
 pipeline rechaza el PR si no) y carga `/estandar-codigo` y `/pruebas-unitarias`. Si la fase
 añade o cambia un método API, `/endpoint-bruno`; si toca BD, `/estandar-bd` y `/paquete-bd`.
+En la primera fase, pasa el issue a **Desarrollo** con `/tablero-github` antes de escribir.
 
 Al terminar la fase, **puerta de fase**, en este orden:
 
@@ -234,4 +238,6 @@ Un análisis o un plan que necesite decir "esto ya está hecho" lo dice con un a
 - `/pruebas-unitarias` — qué reglas de la fase llevan prueba y cómo; también `retro RF-NN` para
   un RF que se implementó sin ellas.
 - `/commit` — al cerrar cada fase (§5.6).
+- `/tablero-github` — estado del issue en el Project: Análisis en `preparar`/`plan`, Desarrollo
+  en la primera `fase`; Code Review y Aprobado los marca el PR (`/cerrar-rf` §8).
 - `/cerrar-rf` — puerta final: exige el RF en *Verificado* o los pendientes explícitos.

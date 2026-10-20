@@ -36,6 +36,8 @@ recorre en GitHub la jerarquía Task → User Story → Feature → Épica e imp
 - Si los archivos tienen cambios de dos motivos distintos → dilo y sugiere dos commits.
 - Si `CADENA` no tiene nada que ver con los archivos (rama antigua cuyo número no es un
   issue de GitHub) → ignora `ISSUE`, `CADENA` y `RF_DE_ISSUE`.
+- Si el issue sigue en Backlog o Análisis en el tablero (`/tablero-github ver`), avisa y
+  propón llevarlo a Desarrollo antes de commitear, sin saltar estados (`/tablero-github` §1).
 
 ## 2. Elige tipo y ámbito
 

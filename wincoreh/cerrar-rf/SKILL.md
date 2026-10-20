@@ -267,3 +267,8 @@ Cierra con esta forma, en este orden:
 Con hallazgos: enúncialos y **espera decisión** antes de arreglar nada que no sea estilo. Si el
 usuario pide arreglar, arregla y **vuelve a correr §1** — no reportes verde sobre una corrección
 sin comprobar.
+
+Tablero de GitHub (`/tablero-github`): al abrir el PR hacia `integration/…`, el issue pasa a
+**Code Review**; cuando ese PR está fusionado, `sincronizar` y **Aprobado** con la fecha del
+merge. Nunca de Backlog o Análisis directo a Code Review o Aprobado: si el issue va atrasado,
+pregunta.

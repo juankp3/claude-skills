@@ -6,6 +6,8 @@ Skills personales de Claude Code, versionados para reutilizarlos entre proyectos
 generales/     sirven en cualquier proyecto PHP de WIN → se enlazan en ~/.claude/skills/
   commit/        Conventional Commits con pie Proyecto/Bloque/RF/Ticket/Refs (+ scripts)
   estandar-bd/   estándar de BD de WIN v2.0 (texto íntegro en estandar-v2.md)
+  tablero-github/ estado del issue en GitHub Projects: Backlog→Análisis→Desarrollo→Code Review→
+                  Aprobado sin saltos, fechas Plan/Real y arrastre del RF padre (+ scripts)
 wincoreh/      solo WincoreH → se enlazan en <worktree>/.claude/skills/
   cerrar-rf/  documentar/  endpoint-bruno/  estandar-codigo/  paquete-bd/
   estandar-bd-wincoreh/   cómo se aplica estandar-bd en WincoreH
